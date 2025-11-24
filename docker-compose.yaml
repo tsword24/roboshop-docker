@@ -55,8 +55,6 @@ services:
     - cart
     - shipping
     - user
-
-
 network:
   default:
     driver: bridge
