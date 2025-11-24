@@ -26,8 +26,8 @@ services:
     - mongodb
     - redis
   cart:
-    image: user:v1
-    container_name: user
+    image: cart:v1
+    container_name: cart
     depends_on:
     - redis
     - catalogue
