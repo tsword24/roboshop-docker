@@ -18,7 +18,7 @@ services:
     image: mysql:v1
     container_name: mysql
     volumes:
-    - mysql: /var/lib/mysql
+    - mysql:/var/lib/mysql
   rabbitmq:
     image: rabbitmq:3
     container_name: rabbitmq
@@ -69,7 +69,8 @@ networks:
     name: roboshop
     external: false #true if u created network using docker network command
 volumes:
-  mysql: #docker volume create mongodb
+  #docker volume create mongodb
+  mysql: 
   redis:
   mongodb:
   rabbitmq:
