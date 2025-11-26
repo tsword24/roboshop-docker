@@ -19,7 +19,7 @@ created_by="tsword03"
 ENV MONGO="true" \
 MONGO_URL="mongodb://mongodb:27017/catalogue"
 USER roboshop
-COPY --from=build /opt/server /opt/server
+COPY --from=build --chown=roboshop:roboshop /opt/server /opt/server
 CMD ["server.js"]    
 ENTRYPOINT ["node"]
 
