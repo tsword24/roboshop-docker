@@ -1,10 +1,38 @@
-FROM node:20
+#this is multi stage build
+FROM node:20.19.5-alpine3.22 AS build
 WORKDIR /opt/server
-EXPOSE 8080
 COPY package.json .
 COPY *.js .
+#this may add extra cache memory
 RUN npm install
+
+
+FROM node:20.19.5-alpine3.22
+#create a group or user
+WORKDIR /opt/server
+RUN addgroup -S roboshop && adduser -S roboshop -G roboshop  && \
+   chown -R roboshop:roboshop /opt/server
+EXPOSE 8080
+LABEL com.project="roboshop" \
+component="user"  \
+created_by="tsword03"
 ENV MONGO="true" \
-    REDIS_URL="redis://redis:6379" \
-    MONGO_URL="mongodb://mongodb:27017/users"
-CMD ["node","server.js"]    
+REDIS_URL="redis://redis:6379" \
+MONGO_URL="mongodb://mongodb:27017/catalogue"
+USER roboshop
+COPY --from=build --chown=roboshop:roboshop /opt/server /opt/server
+CMD ["server.js"]    
+ENTRYPOINT ["node"]
+
+
+
+# FROM node:20
+# WORKDIR /opt/server
+# EXPOSE 8080
+# COPY package.json .
+# COPY *.js .
+# RUN npm install
+# ENV MONGO="true" \
+#     REDIS_URL="redis://redis:6379" \
+#     MONGO_URL="mongodb://mongodb:27017/users"
+# CMD ["node","server.js"]    
