@@ -1,11 +1,15 @@
 services:
   catalogue:
-    image: catalogue:v1
+    build:
+      context: ./catalogue
+      dockerfile: Dockerfile
+    image: khajit03/catalogue:v1
     container_name: catalogue
     depends_on:
     - mongodb
   mongodb:
-    image: mongodb:v1
+    build: ./mongodb
+    image: khajit03/mongodb:v1
     container_name: mongodb
     volumes:
     - mongodb:/data/db #search the docker hub for -v to get where the data is getting stored
@@ -15,7 +19,8 @@ services:
     volumes:
     - redis:/data
   mysql:
-    image: mysql:v1
+    build: ./mysql
+    image: khajit03/mysql:v1
     container_name: mysql
     volumes:
     - mysql:/var/lib/mysql
@@ -28,32 +33,37 @@ services:
       RABBITMQ_DEFAULT_USER: roboshop
       RABBITMQ_DEFAULT_PASS: roboshop123
   user:
-    image: user:v1
+    build: ./user
+    image: khajit03/user:v1
     container_name: user
     depends_on:
     - mongodb
     - redis
   cart:
-    image: cart:v1
+    build: ./cart
+    image: khajit03/cart:v1
     container_name: cart
     depends_on:
     - redis
     - catalogue
   shipping:
-    image: shipping:v1
+    build: ./shipping
+    image: khajit03/shipping:v1
     container_name: shipping
     depends_on:
       - mysql
       - cart
   payment:
-    image: payment:v1
+    build: ./payment
+    image: khajit03/payment:v1
     container_name: payment
     depends_on:
     - rabbitmq
     - user
     - cart
   frontend:
-    image: frontend:v1
+    build: ./frontend
+    image: khajit03/frontend:v1
     container_name: frontend
     ports:
     - "80:80"
